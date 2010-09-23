@@ -2,6 +2,7 @@ package test.java.RSAEngine;
 
 import junit.framework.TestCase;
 import java.math.BigInteger;
+import java.util.*;
 import main.java.RSAEngine.*;
 
 public class TestKeyGen extends TestCase {
@@ -12,7 +13,7 @@ public class TestKeyGen extends TestCase {
 		BigInteger[] ans = new BigInteger[2];
 		ans[0] = BigInteger.valueOf(2);
 		ans[1] = BigInteger.valueOf(-11);
-        assertEquals(k.ExtendedGCD(BigInteger.valueOf(28), BigInteger.valueOf(5)), ans);
+        assertTrue(java.util.Arrays.equals(k.ExtendedGCD(BigInteger.valueOf(28), BigInteger.valueOf(5)), ans));
     }
     
 	public void testEncryptInteger_with_m_616_e_13()
@@ -21,7 +22,7 @@ public class TestKeyGen extends TestCase {
 		BigInteger[] ans = new BigInteger[2];
 		ans[0] = BigInteger.valueOf(-5);
 		ans[1] = BigInteger.valueOf(237);
-        assertEquals(k.ExtendedGCD(BigInteger.valueOf(616), BigInteger.valueOf(13)), ans);
+        assertTrue(java.util.Arrays.equals(k.ExtendedGCD(BigInteger.valueOf(616), BigInteger.valueOf(13)), ans));
     }
     
 	public void testFindCoprime_with_x_616()
