@@ -30,16 +30,18 @@ public class KeyGen {
 		Random rand = new Random();	
 		p = BigInteger.probablePrime(length, rand); 			// Generate prime p
 		q = BigInteger.probablePrime(length, rand); 			// Generate prime q
-		BigInteger j = p.subtract(BigInteger.ONE);	// j = p - 1
-		BigInteger k = q.subtract(BigInteger.ONE);	// k = q - 1
-		BigInteger n = p.multiply(q);				// n = p * q
-		m = j.multiply(k); 							// m = (p-1)(q-1)
-		e = FindCoprime(m);							// find e coprime to m
-		BigInteger[] temp = ExtendedGCD(m, e);		// use Extended-GCD
-		d = temp[1];								// d = inverse of e mod (p-1)(q-1)
+		BigInteger j = p.subtract(BigInteger.ONE);				// j = p - 1
+		BigInteger k = q.subtract(BigInteger.ONE);				// k = q - 1
+		BigInteger n = p.multiply(q);							// n = p * q
+		m = j.multiply(k); 										// m = (p-1)(q-1)
+		e = FindCoprime(m);										// find e coprime to m
+		BigInteger[] temp = ExtendedGCD(m, e);					// use Extended-GCD
+		d = temp[1];											// d = inverse of e mod (p-1)(q-1)
+		if(d.signum() == -1)
+			d = d.add(m);
 		key[0] = e;
 		key[1] = d;
 		key[2] = n;
-		return key;									// key = {e, d, n}
+		return key;												// key = {e, d, n}
 	}
 }
