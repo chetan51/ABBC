@@ -3,18 +3,22 @@ package main.java.RSAEngine;
 import java.math.BigInteger;
 import java.util.*;
 
-public class Keygen {
-	private BigInteger[] ExtendedGCD(BigInteger m, BigInteger e) {
-		if(e.equals(BigInteger.ZERO))								// if e == 0
-			return new BigInteger[] {1, 0}; 						// return {m, 1, 0}
+public class KeyGen {
+	public BigInteger[] ExtendedGCD(BigInteger m, BigInteger e) {
+		if(e.equals(BigInteger.ZERO)) {								// if e == 0
+			BigInteger[] ret = new BigInteger[2];
+			ret[0] = BigInteger.ONE;
+			ret[1] = BigInteger.ZERO;
+			return ret;
+		}
 		else {
-			BigInteger[] arr = ExtendedGCD(e, m.mod(e)));			// arr = egcd(e, m % e)
+			BigInteger[] arr = ExtendedGCD(e, m.mod(e));			// arr = egcd(e, m % e)
 			return new BigInteger[] {arr[1], 						
 				arr[0].subtract((m.divide(e)).multiply(arr[1]))};
 		}
 	}
-	private BigInteger FindCoprime(BigInteger x){
-		BigInteger count = (BigInteger.ONE).add(BigInteger.ONE);	// count = 2
+	public BigInteger FindCoprime(BigInteger x){
+		BigInteger count = BigInteger.valueOf(2);				// count = 2
 		while(!count.gcd(x).equals(BigInteger.ONE)) {			// while gcd(x, count) != 1
 			count = count.add(BigInteger.ONE);					// count++;
 		}
@@ -22,10 +26,10 @@ public class Keygen {
 	}
 	public BigInteger[] GenerateKey(int length) {
 		BigInteger p, q, m, e, d;
-		BigInteger[] key;
+		BigInteger[] key = new BigInteger[3];
 		Random rand = new Random();	
-		p = probablePrime(length, rand); 			// Generate prime p
-		q = probablePrime(length, rand); 			// Generate prime q
+		p = BigInteger.probablePrime(length, rand); 			// Generate prime p
+		q = BigInteger.probablePrime(length, rand); 			// Generate prime q
 		BigInteger j = p.subtract(BigInteger.ONE);	// j = p - 1
 		BigInteger k = q.subtract(BigInteger.ONE);	// k = q - 1
 		BigInteger n = p.multiply(q);				// n = p * q
