@@ -13,6 +13,7 @@ public class Crypter {
 	
 	public BigInteger OS2IP(byte[]X){
 		//OS2IP converts an octet string to a nonnegative integer.
+		//See RSA section 4.2
 		
 		BigInteger out = new BigInteger("0");
 		BigInteger twofiftysix = new BigInteger("256");
@@ -20,12 +21,14 @@ public class Crypter {
 		for(int i = 1; i <= X.length; i++){
 			out = out.add((BigInteger.valueOf(X[X.length - 1])).multiply(twofiftysix.pow(X.length-i)));
 		}
+		//x = x(xLen–1)^256xLen–1 + x(xLen–2)^256xLen–2 + … + x(1)^256 + x0
 		
 		return out;
 	}
 
 	public String I2OSP(BigInteger X, int XLen){
 		//I2OSP converts a nonnegative integer to an octet string of a specified length.
+		//See RSA section 4.1
 		
 		BigInteger twofiftysix = new BigInteger("256");
 		byte[] out = new byte[XLen];
@@ -38,17 +41,21 @@ public class Crypter {
 		for(int i = 1; i <= XLen; i++){
 			cur = X.divideAndRemainder(twofiftysix.pow(XLen-i));
 			X = cur[1];
-			out[XLen - 1] = cur[0].byteValue();
+			out[XLen - i] = cur[0].byteValue();
 		}
+		//basically the inverse of the above
+		//Cur is an array of two bigints, with cur[0]=X/256^(XLen-i) and cur[1]=X/256^[XLen-i]
+		
 		String rv = new String(out);
 		
 		return rv;
 	}
 	
 	public String EncryptString(String plaintext, BigInteger e, BigInteger n) {
+		//See RSA 7.2.1
 		
 		int K = n.bitLength()/8;
-		int extrabit = n.bitLength()%8;
+		int extrabit = n.bitLength()%8; //Set length K as defined in RSA 7.2.1
 		if (extrabit > 0){
 			K = K + 1;
 		}
@@ -62,11 +69,11 @@ public class Crypter {
 		
 		//EME-PKCS1-v1_5 ENCODING
 		
-		byte[] PS = new byte[K - plaintext.length() - 3];
+		byte[] PS = new byte[K - plaintext.length() - 3]; //Set up random padding
 		for(int i = 0; i < PS.length; i++){
 			PS[i] = (byte) ((Math.random())*254+1);
 		}
-		byte[] EM = new byte[K];
+		byte[] EM = new byte[K]; //Splice EM together
 		EM[0] = 0;
 		EM[1] = 2;
 		for(int i = 0; i < PS.length; i++){
@@ -87,9 +94,10 @@ public class Crypter {
 	}
 	
 	public String DecryptString(String cyphertext, BigInteger d, BigInteger n) {
+		//See RSA 7.2.2
 		
 		int K = n.bitLength()/8;
-		int extrabit = n.bitLength()%8;
+		int extrabit = n.bitLength()%8; //Set length K as defined in RSA 7.2.2
 		if (extrabit > 0){
 			K = K + 1;
 		}
@@ -108,7 +116,7 @@ public class Crypter {
 		String EM = I2OSP(m, K);
 		
 		//EME-PKCS1-v1_5 DECODING
-		if(((byte)(EM.charAt(0)) != 0) || ((byte)(EM.charAt(1)) != 2) || (EM.indexOf(0, 1) == -1)){
+		if(((byte)(EM.charAt(0)) != 0) || ((byte)(EM.charAt(1)) != 2) || (EM.indexOf(0, 1) == -1)){ //Check that whatever we got is valid
 			System.out.println("decryption error");
 			return "decryption error";
 		}
@@ -117,7 +125,7 @@ public class Crypter {
 			return "decryption error";
 		}
 
-		return EM.substring(EM.indexOf(0, 1));
+		return EM.substring(EM.indexOf(0, 1)); //throw away padding
 	}
 
 }
