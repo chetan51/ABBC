@@ -6,15 +6,13 @@ import java.util.*;
 public class KeyGen {
 	public BigInteger[] ExtendedGCD(BigInteger m, BigInteger e) {
 		if(e.equals(BigInteger.ZERO)) {								// if e == 0
-			BigInteger[] ret = new BigInteger[2];
-			ret[0] = BigInteger.ONE;
-			ret[1] = BigInteger.ZERO;
+			BigInteger[] ret = {BigInteger.ONE, BigInteger.ZERO};	// return {0, 1}
 			return ret;
 		}
 		else {
-			BigInteger[] arr = ExtendedGCD(e, m.mod(e));			// arr = egcd(e, m % e)
+			BigInteger[] arr = ExtendedGCD(e, m.mod(e));			// arr = {a, b} = egcd(e, m % e)
 			return new BigInteger[] {arr[1], 						
-				arr[0].subtract((m.divide(e)).multiply(arr[1]))};
+				arr[0].subtract((m.divide(e)).multiply(arr[1]))};	// return {b, a - (m / e) * b }
 		}
 	}
 	public BigInteger FindCoprime(BigInteger x){
@@ -26,7 +24,6 @@ public class KeyGen {
 	}
 	public BigInteger[] GenerateKey(int length) {
 		BigInteger p, q, m, e, d;
-		BigInteger[] key = new BigInteger[3];
 		Random rand = new Random();	
 		p = BigInteger.probablePrime(length, rand); 			// Generate prime p
 		q = BigInteger.probablePrime(length, rand); 			// Generate prime q
@@ -37,11 +34,9 @@ public class KeyGen {
 		e = FindCoprime(m);										// find e coprime to m
 		BigInteger[] temp = ExtendedGCD(m, e);					// use Extended-GCD
 		d = temp[1];											// d = inverse of e mod (p-1)(q-1)
-		if(d.signum() == -1)
+		if(d.signum() == -1)									// if d is negative, add the mod to it
 			d = d.add(m);
-		key[0] = e;
-		key[1] = d;
-		key[2] = n;
+		BigInteger[] key = {e, d, n};
 		return key;												// key = {e, d, n}
 	}
 }
