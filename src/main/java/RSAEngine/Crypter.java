@@ -19,7 +19,7 @@ public class Crypter {
 		BigInteger twofiftysix = new BigInteger("256");
 		
 		for(int i = 1; i <= X.length; i++){
-			out = out.add((BigInteger.valueOf(X[X.length - 1])).multiply(twofiftysix.pow(X.length-i)));
+			out = out.add((BigInteger.valueOf(X[X.length - i])).multiply(twofiftysix.pow(X.length-i)));
 		}
 		//x = x(xLen–1)^256xLen–1 + x(xLen–2)^256xLen–2 + … + x(1)^256 + x0
 		
