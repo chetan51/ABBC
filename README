@@ -1,0 +1,11 @@
+Project Part 1:
+
+	We've structured our directories into source code and test code. The source code is found in src/main/java/RSAEngine, and the JUnit test code is found in src/test/java/RSAEngine.
+	
+	We've separated the RSA key generation and the encryption / decryption schemes into two classes, KeyGen and Crypter.
+	
+	You can find the RSA key generation functionality in src/main/java/RSAEngine/KeyGen.java. The main function to consider is GenerateKey.
+
+	The encryption / decryption scheme functionality can be found in src/main/java/RSAEngine/Crypter.java. The main functions that implement the RSAES-PKCS1-V1_5 encryption and decryption are RSAESPKCS1Encrypt and RSAESPKCS1Decrypt. The RSA primitives are on the top of the file, and the component methods of the RSAES-PKCS1-V1_5 scheme are in the rest of the file.
+
+	Note: We tried our best to make the RSAES-PKCS1-V1_5 encryption and decryption work, but we weren't able to make all the tests pass. The RSA primitives and EME-PKCS1-v1_5 encoding / decoding work, but the other parts of the scheme aren't working, and we're still trying our best to fix them.
