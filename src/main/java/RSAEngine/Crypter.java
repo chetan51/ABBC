@@ -3,13 +3,19 @@ package main.java.RSAEngine;
 import java.math.BigInteger;
 
 public class Crypter {
-	public BigInteger EncryptInteger(BigInteger m, BigInteger e, BigInteger n) {
+	/* Primitive RSA Encryption and Decryption
+	 *************************************************************************/
+	
+	public BigInteger RSAEncryptPrimitive(BigInteger m, BigInteger e, BigInteger n) {
 		return m.modPow(e, n);
 	}
 
-	public BigInteger DecryptInteger(BigInteger c, BigInteger d, BigInteger n) {
+	public BigInteger RSADecryptPrimitive(BigInteger c, BigInteger d, BigInteger n) {
 		return c.modPow(d, n);
 	}
+	
+	/* Utility functions
+	 *************************************************************************/
 	
 	public BigInteger OS2IP(byte[]X){
 		//OS2IP converts an octet string to a nonnegative integer.
@@ -50,25 +56,35 @@ public class Crypter {
 		
 		return rv;
 	}
-	
-	public String EncryptString(String plaintext, BigInteger e, BigInteger n) {
-		//See RSA 7.2.1
-		
+
+	public int OctetLengthOfN(BigInteger n) {
 		int K = n.bitLength()/8;
 		int extrabit = n.bitLength()%8; //Set length K as defined in RSA 7.2.1
 		if (extrabit > 0){
 			K = K + 1;
 		}
-		
-		//LENGTH CHECKING
 
+		return K;
+	}
+
+	/* RSAES-PKCS1-V1_5 Encryption Scheme
+	 *************************************************************************/
+	
+	public boolean CheckEncryptionLength(String plaintext, BigInteger n) {
+		int K = OctetLengthOfN(n);
+		
 		if (plaintext.length() > (K - 11)){
-			System.out.println("message too long");
-			return "message too long";
+			return false;
 		}
-		
+		else {
+			return true;
+		}
+	}
+	
+	public byte[] EMEPKCS1Encode(String plaintext, BigInteger n) {
 		//EME-PKCS1-v1_5 ENCODING
-		
+		int K = OctetLengthOfN(n);
+
 		byte[] PS = new byte[K - plaintext.length() - 3]; //Set up random padding
 		for(int i = 0; i < PS.length; i++){
 			PS[i] = (byte) ((Math.random())*254+1);
@@ -85,47 +101,81 @@ public class Crypter {
 			EM[3+PS.length+i] = m[i];
 		}
 		
+		return EM;
+	}
+
+	public String RSAEncrypt(byte[] EM, BigInteger e, BigInteger n) {
 		//RSA ENCRYPTION
 		
+		int K = OctetLengthOfN(n);
+
 		BigInteger littlem = OS2IP(EM);
-		BigInteger littlec = EncryptInteger(littlem, e, n);
+		BigInteger littlec = RSAEncryptPrimitive(littlem, e, n);
 		
 		return I2OSP(littlec, K);
 	}
+
+	public String RSAESPKCS1Encrypt(String plaintext, BigInteger e, BigInteger n) {
+		//See RSA 7.2.1
+		
+		if (!CheckEncryptionLength(plaintext, n)) {
+			return "message too long";
+		}
+
+		byte[] EM = EMEPKCS1Encode(plaintext, n);
+		
+		return RSAEncrypt(EM, e, n);
+	}
+
+	/* RSAES-PKCS1-V1_5 Decryption Scheme
+	 *************************************************************************/
 	
-	public String DecryptString(String cyphertext, BigInteger d, BigInteger n) {
-		//See RSA 7.2.2
-		
-		int K = n.bitLength()/8;
-		int extrabit = n.bitLength()%8; //Set length K as defined in RSA 7.2.2
-		if (extrabit > 0){
-			K = K + 1;
-		}
-		
+	public boolean CheckDecryptionLength(String ciphertext, BigInteger n) {
 		//LENGTH CHECKING
-		
-		if ((cyphertext.length() != K) || (K < 11)){
-			System.out.println("decryption error");
-			return "decryption error";
+		int K = OctetLengthOfN(n);
+
+		if ((ciphertext.length() != K) || (K < 11)){
+			return false;
 		}
-		
+		else {
+			return true;
+		}
+	}
+	
+	public String RSADecrypt(String ciphertext, BigInteger d, BigInteger n) {
 		//RSA DECRYPTION
 		
-		BigInteger c = OS2IP(cyphertext.getBytes());
-		BigInteger m = DecryptInteger(c, d, n); //Spec says error output by DecryptInteger is possible?
-		String EM = I2OSP(m, K);
+		int K = OctetLengthOfN(n);
 		
+		BigInteger c = OS2IP(ciphertext.getBytes());
+		BigInteger m = RSADecryptPrimitive(c, d, n); //Spec says error output by RSADecryptPrimitive is possible?
+		String EM = I2OSP(m, K);
+
+		return EM;
+	}
+
+	public String EMEPKCS1Decode(String EM) {
 		//EME-PKCS1-v1_5 DECODING
 		if(((byte)(EM.charAt(0)) != 0) || ((byte)(EM.charAt(1)) != 2) || (EM.indexOf(0, 1) == -1)){ //Check that whatever we got is valid
-			System.out.println("decryption error");
 			return "decryption error";
 		}
 		else if(EM.substring(3, EM.indexOf(0, 1)).length() < 8){
-			System.out.println("decryption error");
 			return "decryption error";
 		}
 
 		return EM.substring(EM.indexOf(0, 1)); //throw away padding
+	}
+
+	public String DecryptString(String ciphertext, BigInteger d, BigInteger n) {
+		//See RSA 7.2.2
+		
+		if (!CheckDecryptionLength(ciphertext, n)) {
+			return "decryption error";
+		}
+	
+		String EM = RSADecrypt(ciphertext, d, n);
+		
+		return EMEPKCS1Decode(EM);
 	}
 
 }

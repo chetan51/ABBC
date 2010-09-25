@@ -6,31 +6,31 @@ import main.java.RSAEngine.*;
 
 public class TestCrypter extends TestCase {
 
-    public void testEncryptInteger_with_m_5_e_13_n_667()
+    public void testRSAEncryptPrimitive_with_m_5_e_13_n_667()
     {
 		Crypter c = new Crypter();
-        assertEquals(c.EncryptInteger(BigInteger.valueOf(5), BigInteger.valueOf(13), BigInteger.valueOf(667)), BigInteger.valueOf(412));
+        assertEquals(c.RSAEncryptPrimitive(BigInteger.valueOf(5), BigInteger.valueOf(13), BigInteger.valueOf(667)), BigInteger.valueOf(412));
     }
     
-	public void testEncryptInteger_with_m_7_e_13_n_667()
+	public void testRSAEncryptPrimitive_with_m_7_e_13_n_667()
     {
 		Crypter c = new Crypter();
-        assertEquals(c.EncryptInteger(BigInteger.valueOf(7), BigInteger.valueOf(13), BigInteger.valueOf(667)), BigInteger.valueOf(112));
+        assertEquals(c.RSAEncryptPrimitive(BigInteger.valueOf(7), BigInteger.valueOf(13), BigInteger.valueOf(667)), BigInteger.valueOf(112));
     }
     
-	public void testDecryptInteger_with_c_412_d_237_n_667()
+	public void testRSADecryptPrimitive_with_c_412_d_237_n_667()
     {
 		Crypter c = new Crypter();
-        assertEquals(c.DecryptInteger(BigInteger.valueOf(412), BigInteger.valueOf(237), BigInteger.valueOf(667)), BigInteger.valueOf(5));
+        assertEquals(c.RSADecryptPrimitive(BigInteger.valueOf(412), BigInteger.valueOf(237), BigInteger.valueOf(667)), BigInteger.valueOf(5));
     }
     
-	public void testDecryptInteger_with_m_112_d_237_n_667()
+	public void testRSADecryptPrimitive_with_m_112_d_237_n_667()
     {
 		Crypter c = new Crypter();
-        assertEquals(c.DecryptInteger(BigInteger.valueOf(112), BigInteger.valueOf(237), BigInteger.valueOf(667)), BigInteger.valueOf(7));
+        assertEquals(c.RSADecryptPrimitive(BigInteger.valueOf(112), BigInteger.valueOf(237), BigInteger.valueOf(667)), BigInteger.valueOf(7));
     }
 
-	public void testEncryptString() {
+	public void testRSAESPKCS1Encrypt() {
 		// Set up n, e and the plaintext string
 		BigInteger n = new BigInteger("A9E167983F39D55FF2A093415EA6798985C8355D9A915BFB1D01DA197026170FBDA522D035856D7A986614415CCFB7B7083B09C991B81969376DF9651E7BD9A93324A37F3BBBAF460186363432CB07035952FC858B3104B8CC18081448E64F1CFB5D60C4E05C1F53D37F53D86901F105F87A70D1BE83C65F38CF1C2CAA6AA7EB", 16);
 		BigInteger e = BigInteger.valueOf(65537);
@@ -38,7 +38,7 @@ public class TestCrypter extends TestCase {
 		
 		// Test the string encryption
 		Crypter c = new Crypter();
-		assertEquals(c.EncryptString(plaintext, e, n), new String(new BigInteger("3D2AB25B1EB667A40F504CC4D778EC399A899C8790EDECEF062CD739492C9CE58B92B9ECF32AF4AAC7A61EAEC346449891F49A722378E008EFF0B0A8DBC6E621EDC90CEC64CF34C640F5B36C48EE9322808AF8F4A0212B28715C76F3CB99AC7E609787ADCE055839829E0142C44B676D218111FFE69F9D41424E177CBA3A435B", 16).toByteArray()));
+		assertEquals(c.RSAESPKCS1Encrypt(plaintext, e, n), new String(new BigInteger("3D2AB25B1EB667A40F504CC4D778EC399A899C8790EDECEF062CD739492C9CE58B92B9ECF32AF4AAC7A61EAEC346449891F49A722378E008EFF0B0A8DBC6E621EDC90CEC64CF34C640F5B36C48EE9322808AF8F4A0212B28715C76F3CB99AC7E609787ADCE055839829E0142C44B676D218111FFE69F9D41424E177CBA3A435B", 16).toByteArray()));
 	}
 	
 	public void testDecryptString() {
