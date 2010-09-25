@@ -6,10 +6,14 @@ public class Crypter {
 	/* Primitive RSA Encryption and Decryption
 	 *************************************************************************/
 	
+	/*	Encrypts integer m using RSA algorithm
+	 */
 	public BigInteger RSAEncryptPrimitive(BigInteger m, BigInteger e, BigInteger n) {
 		return m.modPow(e, n);
 	}
 
+	/*	Decrypts integer c using RSA algorithm
+	 */
 	public BigInteger RSADecryptPrimitive(BigInteger c, BigInteger d, BigInteger n) {
 		return c.modPow(d, n);
 	}
@@ -17,10 +21,10 @@ public class Crypter {
 	/* Utility functions
 	 *************************************************************************/
 	
+	/*	Converts octet string to nonnegative integer.
+	 *	See RSA 4.2
+	 */
 	public BigInteger OS2IP(byte[]X){
-		//OS2IP converts an octet string to a nonnegative integer.
-		//See RSA section 4.2
-		
 		BigInteger out = new BigInteger("0");
 		BigInteger twofiftysix = new BigInteger("256");
 		
@@ -32,10 +36,10 @@ public class Crypter {
 		return out;
 	}
 
+	/*	Converts nonnegative integer into an octet string of specified length.
+	 *	See RSA 4.1
+	 */
 	public String I2OSP(BigInteger X, int XLen){
-		//I2OSP converts a nonnegative integer to an octet string of a specified length.
-		//See RSA section 4.1
-		
 		BigInteger twofiftysix = new BigInteger("256");
 		byte[] out = new byte[XLen];
 		BigInteger[] cur;
@@ -57,6 +61,8 @@ public class Crypter {
 		return rv;
 	}
 
+	/*	Calculates the octet length of integer n.
+	 */
 	public int OctetLengthOfN(BigInteger n) {
 		int K = n.bitLength()/8;
 		int extrabit = n.bitLength()%8; //Set length K as defined in RSA 7.2.1
@@ -70,6 +76,9 @@ public class Crypter {
 	/* RSAES-PKCS1-V1_5 Encryption Scheme
 	 *************************************************************************/
 	
+	/*	Checks that the length of the message to the encrypted is not too long.
+	 *	See RSA 7.2.1, Step 1
+	 */
 	public boolean CheckEncryptionLength(String plaintext, BigInteger n) {
 		int K = OctetLengthOfN(n);
 		
@@ -81,6 +90,9 @@ public class Crypter {
 		}
 	}
 	
+	/*	Encodes the plaintext using EME-PKCS1-v1_5 encoding.
+	 *	See RSA 7.2.1, Step 2
+	 */
 	public byte[] EMEPKCS1Encode(String plaintext, BigInteger n) {
 		//EME-PKCS1-v1_5 ENCODING
 		int K = OctetLengthOfN(n);
@@ -104,9 +116,10 @@ public class Crypter {
 		return EM;
 	}
 
+	/*	Encrypts the encoded message using RSA primitives.
+	 *	See RSA 7.2.1, Step 3
+	 */
 	public String RSAEncrypt(byte[] EM, BigInteger e, BigInteger n) {
-		//RSA ENCRYPTION
-		
 		int K = OctetLengthOfN(n);
 
 		BigInteger littlem = OS2IP(EM);
@@ -115,9 +128,10 @@ public class Crypter {
 		return I2OSP(littlec, K);
 	}
 
+	/*	Encrypts the plaintext using the RSAES-PKCS1-V1_5 scheme.
+	 *	See RSA 7.2.1
+	 */
 	public String RSAESPKCS1Encrypt(String plaintext, BigInteger e, BigInteger n) {
-		//See RSA 7.2.1
-		
 		if (!CheckEncryptionLength(plaintext, n)) {
 			return "message too long";
 		}
@@ -130,8 +144,10 @@ public class Crypter {
 	/* RSAES-PKCS1-V1_5 Decryption Scheme
 	 *************************************************************************/
 	
+	/*	Checks that the length of the message to the decrypted is not too long.
+	 *	See RSA 7.2.2, Step 1
+	 */
 	public boolean CheckDecryptionLength(String ciphertext, BigInteger n) {
-		//LENGTH CHECKING
 		int K = OctetLengthOfN(n);
 
 		if ((ciphertext.length() != K) || (K < 11)){
@@ -142,9 +158,10 @@ public class Crypter {
 		}
 	}
 	
+	/*	Decrypts the ciphertext using RSA primitives.
+	 *	See RSA 7.2.2, Step 2
+	 */
 	public String RSADecrypt(String ciphertext, BigInteger d, BigInteger n) {
-		//RSA DECRYPTION
-		
 		int K = OctetLengthOfN(n);
 		
 		BigInteger c = OS2IP(ciphertext.getBytes());
@@ -154,6 +171,9 @@ public class Crypter {
 		return EM;
 	}
 
+	/*	Decodes the encoded message using the EME-PKCS1-v1_5 scheme.
+	 *	See RSA 7.2.2, Step 3
+	 */
 	public String EMEPKCS1Decode(String EM) {
 		//EME-PKCS1-v1_5 DECODING
 		if(((byte)(EM.charAt(0)) != 0) || ((byte)(EM.charAt(1)) != 2) || (EM.indexOf(0, 1) == -1)){ //Check that whatever we got is valid
@@ -166,9 +186,10 @@ public class Crypter {
 		return EM.substring(EM.indexOf(0, 1)); //throw away padding
 	}
 
-	public String DecryptString(String ciphertext, BigInteger d, BigInteger n) {
-		//See RSA 7.2.2
-		
+	/*	Decrypts the ciphertext using the RSAES-PKCS1-V1_5 scheme.
+	 *	See RSA 7.2.2
+	 */
+	public String RSAESPKCS1Decrypt(String ciphertext, BigInteger d, BigInteger n) {
 		if (!CheckDecryptionLength(ciphertext, n)) {
 			return "decryption error";
 		}

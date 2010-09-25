@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class KeyGen {
+	
+	/*	Finds the GCD of the two numbers using the Extended Euclidean algorithm.
+	 */
 	public BigInteger[] ExtendedGCD(BigInteger m, BigInteger e) {
 		if(e.equals(BigInteger.ZERO)) {								// if e == 0
 			BigInteger[] ret = {BigInteger.ONE, BigInteger.ZERO};	// return {0, 1}
@@ -15,6 +18,9 @@ public class KeyGen {
 				arr[0].subtract((m.divide(e)).multiply(arr[1]))};	// return {b, a - (m / e) * b }
 		}
 	}
+	
+	/*	Finds an integer co-prime to the one given.
+	 */
 	public BigInteger FindCoprime(BigInteger x){
 		BigInteger count = BigInteger.valueOf(2);				// count = 2
 		while(!count.gcd(x).equals(BigInteger.ONE)) {			// while gcd(x, count) != 1
@@ -22,6 +28,9 @@ public class KeyGen {
 		}
 		return count;											// returns count coprime to x
 	}
+	
+	/*	Generates an RSA key of the given length.
+	 */
 	public BigInteger[] GenerateKey(int length) {
 		BigInteger p, q, m, e, d;
 		Random rand = new Random();	
@@ -39,4 +48,5 @@ public class KeyGen {
 		BigInteger[] key = {e, d, n};
 		return key;												// key = {e, d, n}
 	}
+	
 }
