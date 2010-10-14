@@ -30,6 +30,18 @@ public class TestCrypter extends TestCase {
         assertEquals(c.RSADecryptPrimitive(BigInteger.valueOf(112), BigInteger.valueOf(237), BigInteger.valueOf(667)), BigInteger.valueOf(7));
     }
 
+    public void testI2OSP_with_6382179() {
+        System.out.println(new String("abc"));
+		Crypter c = new Crypter();
+        System.out.println(new String(c.I2OSP(BigInteger.valueOf(6382179), 3)));
+        assertEquals(new String(c.I2OSP(BigInteger.valueOf(6382179), 3)), new String("abc"));
+    }
+
+    public void testI2OSPandOS2IP_with_97() {
+		Crypter c = new Crypter();
+        assertEquals(c.OS2IP(c.I2OSP(BigInteger.valueOf(97), 1)), BigInteger.valueOf(97));
+    }
+
 	public void testRSAESPKCS1Encrypt() {
 		// Set up n, e and the plaintext string
 		BigInteger n = new BigInteger("A9E167983F39D55FF2A093415EA6798985C8355D9A915BFB1D01DA197026170FBDA522D035856D7A986614415CCFB7B7083B09C991B81969376DF9651E7BD9A93324A37F3BBBAF460186363432CB07035952FC858B3104B8CC18081448E64F1CFB5D60C4E05C1F53D37F53D86901F105F87A70D1BE83C65F38CF1C2CAA6AA7EB", 16);

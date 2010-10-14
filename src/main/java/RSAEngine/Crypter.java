@@ -29,7 +29,7 @@ public class Crypter {
 		BigInteger twofiftysix = new BigInteger("256");
 		
 		for(int i = 1; i <= X.length; i++){
-			out = out.add((BigInteger.valueOf(X[X.length - i])).multiply(twofiftysix.pow(X.length-i)));
+			out = out.add((BigInteger.valueOf(X[i - 1])).multiply(twofiftysix.pow(X.length-i)));
 		}
 		//x = x(xLen–1)^256xLen–1 + x(xLen–2)^256xLen–2 + … + x(1)^256 + x0
 		
@@ -39,26 +39,24 @@ public class Crypter {
 	/*	Converts nonnegative integer into an octet string of specified length.
 	 *	See RSA 4.1
 	 */
-	public String I2OSP(BigInteger X, int XLen){
+	public byte[] I2OSP(BigInteger X, int XLen){
 		BigInteger twofiftysix = new BigInteger("256");
 		byte[] out = new byte[XLen];
 		BigInteger[] cur;
 		
 		if(X.compareTo(twofiftysix.pow(XLen)) >= 0){
 			System.out.println("integer too large");
-			return "integer too large";
+			//return "integer too large";
 		}
 		for(int i = 1; i <= XLen; i++){
 			cur = X.divideAndRemainder(twofiftysix.pow(XLen-i));
-			X = cur[1];
-			out[XLen - i] = cur[0].byteValue();
+			//X = cur[1];
+			out[i - 1] = cur[0].byteValue();
 		}
 		//basically the inverse of the above
 		//Cur is an array of two bigints, with cur[0]=X/256^(XLen-i) and cur[1]=X/256^[XLen-i]
 		
-		String rv = new String(out);
-		
-		return rv;
+		return out;
 	}
 
 	/*	Calculates the octet length of integer n.
@@ -125,7 +123,7 @@ public class Crypter {
 		BigInteger littlem = OS2IP(EM);
 		BigInteger littlec = RSAEncryptPrimitive(littlem, e, n);
 		
-		return I2OSP(littlec, K);
+		return new String(I2OSP(littlec, K));
 	}
 
 	/*	Encrypts the plaintext using the RSAES-PKCS1-V1_5 scheme.
@@ -166,7 +164,7 @@ public class Crypter {
 		
 		BigInteger c = OS2IP(ciphertext.getBytes());
 		BigInteger m = RSADecryptPrimitive(c, d, n); //Spec says error output by RSADecryptPrimitive is possible?
-		String EM = I2OSP(m, K);
+		String EM = new String(I2OSP(m, K));
 
 		return EM;
 	}
