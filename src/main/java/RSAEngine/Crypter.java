@@ -29,7 +29,7 @@ public class Crypter {
 		BigInteger twofiftysix = new BigInteger("256");
 		
 		for(int i = 1; i <= X.length; i++){
-			out = out.add((BigInteger.valueOf(X[i - 1])).multiply(twofiftysix.pow(X.length-i)));
+			out = out.add((BigInteger.valueOf(0xFF & X[i - 1])).multiply(twofiftysix.pow(X.length-i)));
 		}
 		//x = x(xLen–1)^256xLen–1 + x(xLen–2)^256xLen–2 + … + x(1)^256 + x0
 		
@@ -175,10 +175,10 @@ public class Crypter {
 	public String EMEPKCS1Decode(String EM) {
 		//EME-PKCS1-v1_5 DECODING
 		if(((byte)(EM.charAt(0)) != 0) || ((byte)(EM.charAt(1)) != 2) || (EM.indexOf(0, 1) == -1)){ //Check that whatever we got is valid
-			return "decryption error";
+			return "decryption error 1";
 		}
 		else if(EM.substring(3, EM.indexOf(0, 1)).length() < 8){
-			return "decryption error";
+			return "decryption error 2";
 		}
 
 		return EM.substring(EM.indexOf(0, 1)); //throw away padding
@@ -189,7 +189,7 @@ public class Crypter {
 	 */
 	public String RSAESPKCS1Decrypt(String ciphertext, BigInteger d, BigInteger n) {
 		if (!CheckDecryptionLength(ciphertext, n)) {
-			return "decryption error";
+			return "decryption error 3";
 		}
 	
 		String EM = RSADecrypt(ciphertext, d, n);
