@@ -45,8 +45,7 @@ public class Crypter {
 		BigInteger[] cur;
 		
 		if(X.compareTo(twofiftysix.pow(XLen)) >= 0){
-			System.out.println("integer too large");
-			//return "integer too large";
+			return new String("integer too large").getBytes();
 		}
 		for(int i = 1; i <= XLen; i++){
 			cur = X.divideAndRemainder(twofiftysix.pow(XLen-i));
@@ -177,11 +176,11 @@ public class Crypter {
 		if(((byte)(EM.charAt(0)) != 0) || ((byte)(EM.charAt(1)) != 2) || (EM.indexOf(0, 1) == -1)){ //Check that whatever we got is valid
 			return "decryption error 1";
 		}
-		else if(EM.substring(3, EM.indexOf(0, 1)).length() < 8){
+		else if(EM.substring(2, EM.indexOf(0, 1)).length() < 8){
 			return "decryption error 2";
 		}
 
-		return EM.substring(EM.indexOf(0, 1)); //throw away padding
+		return EM.substring(EM.indexOf(0, 1) + 1); //throw away padding
 	}
 
 	/*	Decrypts the ciphertext using the RSAES-PKCS1-V1_5 scheme.

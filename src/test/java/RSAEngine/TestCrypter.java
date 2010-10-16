@@ -20,6 +20,8 @@ public class TestCrypter extends TestCase {
 
     private byte[] EM;
 
+    private String mystery;
+
     public void setUp() {
         c = new Crypter();
 
@@ -36,6 +38,8 @@ public class TestCrypter extends TestCase {
 		ciphertext_int = new BigInteger(ciphertext_string, 16);
 
         EM = new BigInteger("0002257F48FD1F1793B7E5E02306F2D3228F5C95ADF5F31566729F132AA12009E3FC9B2B475CD6944EF191E3F59545E671E474B555799FE3756099F044964038B16B2148E9A2F9C6F44BB5C52E3C6C8061CF694145FAFDB24402AD1819EACEDF4A36C6E4D2CD8FC1D62E5A1268F496004E636AF98E40F3ADCFCCB698F4E80B9F", 16).toByteArray();
+
+		mystery = new String(new BigInteger("1A6820F8546A1F114727D6151B58AD87D77E49C0AABC9B779F30285B65E590E42FC3F2A5A9A03A5A07AC1141FE3E6F2C1E78AAE9ECBCB1527FAA273BFDB12679D534446F457781E55754C837945926B7418FD2502D2AB4F96E317A1212741A0F6D7886279BE27B73492DB9BEEBEFEB4BC01C1EFDCC5A8BD8B19A36008A4FF338", 16).toByteArray());
     }
 
     public void testRSAEncryptPrimitive_with_m_5_e_13_n_667()
@@ -48,14 +52,26 @@ public class TestCrypter extends TestCase {
         assertEquals(c.RSAEncryptPrimitive(BigInteger.valueOf(7), BigInteger.valueOf(13), BigInteger.valueOf(667)), BigInteger.valueOf(112));
     }
     
+    public void testRSAEncryptPrimitive() {
+        assertEquals(c.RSAEncryptPrimitive(new BigInteger(EM), e, n), ciphertext_int);
+    }
+
 	public void testRSADecryptPrimitive_with_c_412_d_237_n_667()
     {
         assertEquals(c.RSADecryptPrimitive(BigInteger.valueOf(412), BigInteger.valueOf(237), BigInteger.valueOf(667)), BigInteger.valueOf(5));
     }
     
-	public void testRSADecryptPrimitive_with_m_112_d_237_n_667()
+	public void testRSADecryptPrimitive_with_c_112_d_237_n_667()
     {
         assertEquals(c.RSADecryptPrimitive(BigInteger.valueOf(112), BigInteger.valueOf(237), BigInteger.valueOf(667)), BigInteger.valueOf(7));
+    }
+
+    public void testRSADecryptPrimitive() {
+        assertEquals(c.RSADecryptPrimitive(ciphertext_int, d, n), new BigInteger(EM));
+    }
+
+    public void testOctetLengthOfN() {
+        assertEquals(c.OctetLengthOfN(n), 128);
     }
 
     public void testI2OSP_with_6382179_length_3() {
@@ -76,6 +92,14 @@ public class TestCrypter extends TestCase {
 
     public void testI2OSPandOS2IP_with_97() {
         assertEquals(c.OS2IP(c.I2OSP(BigInteger.valueOf(97), 1)), BigInteger.valueOf(97));
+    }
+
+    public void testI2OSPandOS2IP_with_ciphertext() {
+        assertEquals(c.OS2IP(c.I2OSP(ciphertext_int, 128)), ciphertext_int);
+    }
+
+    public void testI2OSPandOS2IP_with_EM() {
+        assertEquals(c.OS2IP(c.I2OSP(new BigInteger(EM), 128)), new BigInteger(EM));
     }
 
     public void testEMEPKCS1Encode() {
@@ -103,7 +127,7 @@ public class TestCrypter extends TestCase {
     }
 
     public void testEMEPKCS1Decode() {
-        assertEquals(c.EMEPKCS1Decode(new String(EM)), plaintext); // putting EM into a String seems to be stripping off leading 0s
+        assertEquals(c.EMEPKCS1Decode((char)0 + new String(EM)), plaintext); // putting EM into a String seems to be stripping off leading 0s
     }
 
     public void testRSAEncrypt() {
@@ -111,11 +135,15 @@ public class TestCrypter extends TestCase {
     }
 
     public void testRSADecrypt() {
-        assertEquals(c.RSADecrypt(ciphertext, d, n), EM);
+        assertEquals(c.RSADecrypt(ciphertext, d, n), (char)0 + new String(EM));
     }
 
     public void testRSAESPKCS1EncryptAndDecrypt() {
         assertEquals(c.RSAESPKCS1Decrypt(c.RSAESPKCS1Encrypt(plaintext, e, n), d, n), plaintext);
+    }
+
+    public void testRSAESPKCS1Decrypt_mystery() {
+        assertEquals(c.RSAESPKCS1Decrypt(mystery, d, n), "Yeah, you got it. :)");
     }
 
 }
