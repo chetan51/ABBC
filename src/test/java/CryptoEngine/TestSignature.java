@@ -1,8 +1,11 @@
-package test.java.CryptoEngine;
+//package test.java.CryptoEngine;
 
 import junit.framework.TestCase;
 import java.math.BigInteger;
-import main.java.CryptoEngine.*;
+//import main.java.CryptoEngine.*;
+import java.security.NoSuchAlgorithmException;
+
+import org.json.JSONException;
 
 public class TestSignature extends TestCase {
 
@@ -17,7 +20,12 @@ public class TestSignature extends TestCase {
     private BigInteger n;
 
     public void setUp() {
-         s = new Signature();
+         try {
+			s = new Signature();
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
          username = "chetan51";
          message = "This is a the message to be signed (a String)";
@@ -27,7 +35,7 @@ public class TestSignature extends TestCase {
          e = BigInteger.valueOf(65537);
     }
 
-    public void testGenerateAndVerifySignature() {
+    public void testGenerateAndVerifySignature() throws JSONException {
         assertEquals(s.verifySignature(s.generateSignature(username, message, d, n), e, n), true);
     }
 
