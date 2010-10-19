@@ -27,8 +27,8 @@ public class TestSignature extends TestCase {
          e = BigInteger.valueOf(65537);
     }
 
-    public void testGenerateSignature() {
-        System.out.println(s.generateSignature(username, message, d, n));
+    public void testGenerateAndVerifySignature() {
+        assertEquals(s.verifySignature(s.generateSignature(username, message, d, n), e, n), true);
     }
 
 }
