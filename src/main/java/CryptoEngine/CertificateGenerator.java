@@ -41,7 +41,7 @@ public class CertificateGenerator {
 		notes = note;
 	}
 	
-	private String generate(BigInteger mod, BigInteger public_exp) throws JSONException {
+	public String generate(BigInteger mod, BigInteger public_exp) throws JSONException {
 		JSONObject j = new JSONObject();
 		
 		j.put("version", 1);
