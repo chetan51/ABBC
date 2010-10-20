@@ -51,8 +51,8 @@ public class CertificateGenerator {
 		j.put("not_before", System.currentTimeMillis());
 		j.put("not_after", System.currentTimeMillis() + 31536000); // Year after not_before
 		j.put("notes", notes);
-		j.put("modulus", mod);			
-		j.put("public_exponent", public_exp);		
+		j.put("modulus", mod.toString(16));			
+		j.put("public_exponent", public_exp.toString(16));		
 		
 		return j.toString();		
 	}
@@ -82,7 +82,7 @@ public class CertificateGenerator {
 	    System.out.println("Verify the Signature: "  + b);
 	    System.out.println(str);
 	    System.out.println(sig);
-	    System.out.println("Private key: " + arr[1]);
+	    System.out.println("Private key: " + arr[1].toString(16));
 	    
 	    out.write("Certificate: " + str);							// Print the Certificate and Signed Certificate to out.txt
 	    out.write("\n");
