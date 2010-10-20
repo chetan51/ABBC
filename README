@@ -9,3 +9,13 @@ Project Part 1:
 	The encryption / decryption scheme functionality can be found in src/main/java/RSAEngine/Crypter.java. The main functions that implement the RSAES-PKCS1-V1_5 encryption and decryption are RSAESPKCS1Encrypt and RSAESPKCS1Decrypt. The RSA primitives are on the top of the file, and the component methods of the RSAES-PKCS1-V1_5 scheme are in the rest of the file.
 
 	Note: We tried our best to make the RSAES-PKCS1-V1_5 encryption and decryption work, but we weren't able to make all the tests pass. The RSA primitives and EME-PKCS1-v1_5 encoding / decoding work, but the other parts of the scheme aren't working, and we're still trying our best to fix them.
+
+Project Part 2:
+
+    We've fixed all our bugs from Part 1, and finished all the requirements for Part 2.
+
+    You can find the functions for generating and verifying signatures in src/main/java/CryptoEngine/Signature.java.
+
+    You can find the functions for generating certificates in src/main/java/CryptoEngine/CertificateGenerator.java. The `main` function will generate a certificate for you, given the data fields as arguments at the command line.
+
+    All test code is, similar to before, in src/test/java/CryptoEngine and JUnit-compatible.
