@@ -27,7 +27,7 @@ public class Signature {
 		JSONObject signature = new JSONObject();					//Initialize the JSON object and shove everything there
 		signature.put("username", username);
 		signature.put("message", message);
-		signature.put("signature", cypherhash);
+		signature.put("signature", cypherhash.toString(16));
 		return signature.toString();								//return the string
 	}
 	
@@ -37,7 +37,7 @@ public class Signature {
 		byte[] h = SHA256.digest(message.getBytes());				//hash it
 		BigInteger hash = new BigInteger(h);
 		String cypherhash = (String) sig.getString("signature");	//get out the cyphertext
-		BigInteger c = new BigInteger(cypherhash);
+		BigInteger c = new BigInteger(cypherhash, 16);
 		BigInteger plainsig = a.RSADecryptPrimitive(c, e, n);		//decrypt it
 		if(hash.compareTo(BigInteger.ZERO) < 0){
 			return plainsig.subtract(n).equals(hash);
