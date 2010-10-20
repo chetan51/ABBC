@@ -20,10 +20,10 @@ public class Signature {
 		a = new Crypter();
 	}
 	
-	public String generateSignature(String username, String message, BigInteger d, BigInteger n) throws JSONException{
+	public String generateSignature(String username, String message, BigInteger e, BigInteger n) throws JSONException{
 		byte[] h = SHA256.digest(message.getBytes());				//get me a hash of message
 		BigInteger hash = new BigInteger(h);
-		BigInteger cypherhash = a.RSAEncryptPrimitive(hash, d, n);	//Encrypt my hash
+		BigInteger cypherhash = a.RSAEncryptPrimitive(hash, e, n);	//Encrypt my hash
 		JSONObject signature = new JSONObject();					//Initialize the JSON object and shove everything there
 		signature.put("username", username);
 		signature.put("message", message);
@@ -31,14 +31,14 @@ public class Signature {
 		return signature.toString();								//return the string
 	}
 	
-	public boolean verifySignature(String signature, BigInteger e, BigInteger n) throws JSONException{
+	public boolean verifySignature(String signature, BigInteger d, BigInteger n) throws JSONException{
 		JSONObject sig = new JSONObject(signature);					//Build the JSON
 		String message = sig.getString("message");					//Pull out the message
 		byte[] h = SHA256.digest(message.getBytes());				//hash it
 		BigInteger hash = new BigInteger(h);
 		String cypherhash = (String) sig.getString("signature");	//get out the cyphertext
 		BigInteger c = new BigInteger(cypherhash, 16);
-		BigInteger plainsig = a.RSADecryptPrimitive(c, e, n);		//decrypt it
+		BigInteger plainsig = a.RSADecryptPrimitive(c, d, n);		//decrypt it
 		if(hash.compareTo(BigInteger.ZERO) < 0){
 			return plainsig.subtract(n).equals(hash);
 		}
