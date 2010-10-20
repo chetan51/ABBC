@@ -22,12 +22,13 @@ public class Signature {
 	
 	public String generateSignature(String username, String message, BigInteger e, BigInteger n) throws JSONException{
 		byte[] h = SHA256.digest(message.getBytes());				//get me a hash of message
-		BigInteger hash = new BigInteger(h);
-		BigInteger cypherhash = a.RSAEncryptPrimitive(hash, e, n);	//Encrypt my hash
+		String hash = new String(h);
+		String cypherhash = a.RSAESPKCS1Encrypt(hash, e, n);	//Encrypt my hash
+        String cypherhash_hex = new BigInteger(1, cypherhash.getBytes()).toString(16);
 		JSONObject signature = new JSONObject();					//Initialize the JSON object and shove everything there
 		signature.put("username", username);
 		signature.put("message", message);
-		signature.put("signature", cypherhash.toString(16));
+		signature.put("signature", cypherhash_hex);
 		return signature.toString();								//return the string
 	}
 	
@@ -36,12 +37,10 @@ public class Signature {
 		String message = sig.getString("message");					//Pull out the message
 		byte[] h = SHA256.digest(message.getBytes());				//hash it
 		BigInteger hash = new BigInteger(h);
-		String cypherhash = (String) sig.getString("signature");	//get out the cyphertext
-		BigInteger c = new BigInteger(cypherhash, 16);
-		BigInteger plainsig = a.RSADecryptPrimitive(c, d, n);		//decrypt it
-		if(hash.compareTo(BigInteger.ZERO) < 0){
-			return plainsig.subtract(n).equals(hash);
-		}
+		String cypherhash_hex = (String) sig.getString("signature");//get out the cyphertext
+		String cypherhash = new String(new BigInteger(cypherhash_hex, 16).toByteArray());                                                     // convert to string
+		BigInteger plainsig = new BigInteger(a.RSAESPKCS1Decrypt(cypherhash, d, n).getBytes());                                                     // decrypt it
+
 		return plainsig.equals(hash);								//check validity
 	}
 }
