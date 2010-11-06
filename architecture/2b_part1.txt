@@ -20,6 +20,8 @@ Each user gets their own database.
 
 Class DataController
 
+B    - init(username) // Also connects to database
+
     Storing:
 
         Client:
@@ -28,36 +30,36 @@ Class DataController
 
         Friends:
             
-            - addFriend(first name, last name, username, certificate)
+A            - addFriend(first name, last name, username, certificate)
             
         Wall posts:
 
-            - addWallPost(sender's username, message)
+B            - addWallPost(sender's username, message)
 
     Retrieving:
 
         Client:
 
-            - getPrivateKey()
-            - getCertificate()
-            - getUsername()
+B            - getPrivateKey()
+B            - getCertificate()
+B            - getUsername()
 
         Friends:
 
-            - getFriends()
-            - getCertificate(username)
-            - isFriend(username)
+A            - getFriends()
+A            - getCertificate(username)
+A            - isFriend(username)
 
         Wall posts:
 
-            - getWallPosts()
+B            - getWallPosts()
 
     Printing:
 
         Friends:
 
-            - printFriends()
+A            - printFriends()
 
         Wall posts:
 
-            - printWallPosts()
+B            - printWallPosts()
