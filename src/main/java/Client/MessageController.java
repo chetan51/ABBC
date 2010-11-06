@@ -1,8 +1,18 @@
 package main.java.Client;
 
+import main.java.RSAEngine.Crypter;
+import main.java.CryptoEngine.Signature;
+
 import java.math.BigInteger;
-import org.JSON.JSONObject;
-import org.JSON.JSONException;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.GeneralSecurityException;
+
+import javax.crypto.*;
+import javax.crypto.spec.*;
+
+import org.json.JSONObject;
+import org.json.JSONException;
 
 public class MessageController {
 
@@ -55,22 +65,10 @@ public class MessageController {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
+		} catch (GeneralSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        }
 		return message.toString();
 	}
 

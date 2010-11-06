@@ -92,7 +92,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    public static BigInteger getPrivateKey() {
+    public static BigInteger[] getPrivateKey() {
 
     }
 
