@@ -1,0 +1,63 @@
+User Database
+    
+    Collections:
+       
+        - client
+            - username
+            - password hash
+            - certificate
+            - private key
+        - friends
+            - first name
+            - last name
+            - username
+            - certificate
+        - wallposts
+            - sender's username
+            - message
+
+Each user gets their own database.
+
+Class DataController
+
+    Storing:
+
+        Client:
+            
+            - registerClient(username, password, certificate, private key)
+
+        Friends:
+            
+            - addFriend(first name, last name, username, certificate)
+            
+        Wall posts:
+
+            - addWallPost(sender's username, message)
+
+    Retrieving:
+
+        Client:
+
+            - getPrivateKey()
+            - getCertificate()
+            - getUsername()
+
+        Friends:
+
+            - getFriends()
+            - getCertificate(username)
+            - isFriend(username)
+
+        Wall posts:
+
+            - getWallPosts()
+
+    Printing:
+
+        Friends:
+
+            - printFriends()
+
+        Wall posts:
+
+            - printWallPosts()
