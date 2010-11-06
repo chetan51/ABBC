@@ -2,4 +2,4 @@
 
 javac -d build @java.list
 cd build
-java junit.textui.TestRunner test.java.CryptoEngine.TestSignature
+java junit.textui.TestRunner test.java.Client.TestDataController
