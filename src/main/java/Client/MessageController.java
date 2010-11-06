@@ -6,7 +6,7 @@ import org.JSON.JSONException;
 
 public class MessageController {
 
-    boolean processMessage(JSONObject message) {
+    public static boolean processMessage(JSONObject message) {
 
     }
 

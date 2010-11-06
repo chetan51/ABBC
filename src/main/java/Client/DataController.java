@@ -16,7 +16,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    boolean registerClient( String username,
+    public static boolean registerClient( String username,
                             String password,
                             JSONObject certificate,
                             BigInteger privateKey) {
@@ -28,7 +28,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    boolean addFriend(  String firstName,
+    public static boolean addFriend(  String firstName,
                         String lastName,
                         String username,
                         JSONObject certificate) {
@@ -40,7 +40,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    boolean addWallPost( String username,
+    public static boolean addWallPost( String username,
                         String message) {
 
     }
@@ -55,15 +55,15 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    BigInteger getPrivateKey() {
+    public static BigInteger getPrivateKey() {
 
     }
 
-    JSONObject getCertificate() {
+    public static JSONObject getCertificate() {
 
     }
 
-    String getUsername() {
+    public static String getUsername() {
 
     }
 
@@ -72,15 +72,15 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    JSONObject[] getFriends() {
+    public static JSONObject[] getFriends() {
 
     }
 
-    JSONObject getCertificate(String username) {
+    public static JSONObject getCertificate(String username) {
 
     }
 
-    boolean isFriend(String username) {
+    public static boolean isFriend(String username) {
 
     }
 
@@ -89,7 +89,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    JSONObject getWallPosts() {
+    public static JSONObject getWallPosts() {
 
     }
 
@@ -103,7 +103,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    void printFriends() {
+    public static void printFriends() {
 
     }
 
@@ -112,7 +112,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    void printWallPosts() {
+    public static void printWallPosts() {
 
     }
 
