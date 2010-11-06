@@ -18,8 +18,8 @@ public class DataController {
      *  Class variables
      */
 
-    Mongo m;
-    DB db;
+    static Mongo m;
+    static DB db;
 
     /*
      *  Initializer
@@ -28,7 +28,7 @@ public class DataController {
     ------------------------------------------------------------------------ 
      */
 
-    public static void initialize(String username, String password) {
+    public static void initialize(String username, String password) throws Throwable{
         // Initialize database connection
         m = new Mongo("localhost", 27017);
 
@@ -36,10 +36,10 @@ public class DataController {
         db = m.getDB("abbc_" + username);
         
         // Authenticate user
-        boolean auth = db.authenticate(username, password);
+        boolean auth = db.authenticate(username, password.toCharArray());
 
         if (!auth) {
-            throw AuthenticationException;
+            throw new Throwable("Unable to authenticate database connection");
         }
     }
 
@@ -57,7 +57,7 @@ public class DataController {
                             String password,
                             JSONObject certificate,
                             BigInteger privateKey) {
-
+        return true;
     }
 
     /*
@@ -69,7 +69,7 @@ public class DataController {
                         String lastName,
                         String username,
                         JSONObject certificate) {
-
+        return true;
     }
 
     /*
@@ -79,7 +79,7 @@ public class DataController {
 
     public static boolean addWallPost( String username,
                         String message) {
-
+        return true;
     }
 
     /*
@@ -93,15 +93,15 @@ public class DataController {
      */
 
     public static BigInteger[] getPrivateKey() {
-
+        return null;
     }
 
     public static JSONObject getCertificate() {
-
+        return null;
     }
 
     public static String getUsername() {
-
+        return null;
     }
 
     /*
@@ -110,15 +110,15 @@ public class DataController {
      */
 
     public static JSONObject[] getFriends() {
-
+        return null;
     }
 
     public static JSONObject getCertificate(String username) {
-
+        return null;
     }
 
     public static boolean isFriend(String username) {
-
+        return true;
     }
 
     /*
@@ -127,7 +127,7 @@ public class DataController {
      */
 
     public static JSONObject getWallPosts() {
-
+        return null;
     }
 
     /*

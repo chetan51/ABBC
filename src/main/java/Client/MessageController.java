@@ -17,7 +17,7 @@ import org.json.JSONException;
 public class MessageController {
 
     public static boolean processMessage(JSONObject message) {
-
+        return true;
     }
 
 	public static String createMessage(String recipient, String cmd, String cmdargs){
