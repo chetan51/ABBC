@@ -40,7 +40,7 @@ B            - addWallPost(sender's username, message)
 
         Client:
 
-B            - getPrivateKey()
+B            - getPrivateKey() // returns BigInteger[] exponent, modulus
 B            - getCertificate()
 B            - getUsername()
 
