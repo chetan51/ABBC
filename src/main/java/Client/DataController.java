@@ -68,7 +68,7 @@ public class DataController {
     public static boolean addFriend(  String firstName,
                         String lastName,
                         String username,
-                        JSONObject cert) {
+                        JSONObject cert) throws JSONException {
     	DBCollection coll = db.getCollection("friends");			// Get the friends collection
     	BasicDBObject friend = new BasicDBObject();
 
@@ -143,7 +143,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    public static JSONObject[] getFriends() {
+    public static JSONObject[] getFriends() throws JSONException {
     	DBCollection coll = db.getCollection("friends");
     	JSONObject[] arr = new JSONObject[(int)coll.getCount()];		// Create a JSONObject array with length of coll
     	DBCursor cur = coll.find();
@@ -163,7 +163,7 @@ public class DataController {
         return arr;
     }
 
-    public static JSONObject getCertificate(String username) {
+    public static JSONObject getCertificate(String username) throws JSONException {
     	DBCollection coll = db.getCollection("friends");
     	
     	BasicDBObject query = new BasicDBObject();
@@ -208,7 +208,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    public static JSONObject getWallPosts() {
+    public static JSONObject[] getWallPosts() {
 
         // Get wallposts collection
     	DBCollection coll = db.getCollection("friends");
