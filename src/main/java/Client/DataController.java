@@ -68,7 +68,29 @@ public class DataController {
     public static boolean addFriend(  String firstName,
                         String lastName,
                         String username,
-                        JSONObject certificate) {
+                        JSONObject cert) {
+    	DBCollection coll = db.getCollection("friends");			// Get the friends collection
+    	BasicDBObject friend = new BasicDBObject();
+
+        friend.put("firstname", firstName);							// Input the info for the friend
+        friend.put("lastname", lastName);
+        friend.put("username", username);
+        BasicDBObject certificate = new BasicDBObject();			// Copy over the certificate info
+        
+        certificate.put("version", cert.get("version"));
+        certificate.put("realname", cert.get("realname"));
+        certificate.put("username", cert.get("username"));
+        certificate.put("email", cert.get("email"));
+        certificate.put("not_before", cert.get("not_before"));
+        certificate.put("not_after", cert.get("not_after")); 
+        certificate.put("notes", cert.get("notes"));
+        certificate.put("modulus", cert.get("modulus"));			
+        certificate.put("public_exponent", cert.get("public_exponent"));
+        
+        friend.put("certificate", certificate);
+        
+        coll.insert(friend);										 // Insert the friend document into the collection
+
         return true;
     }
 
@@ -110,15 +132,63 @@ public class DataController {
      */
 
     public static JSONObject[] getFriends() {
-        return null;
+    	DBCollection coll = db.getCollection("friends");
+    	JSONObject[] arr = new JSONObject[coll.getCount()];		// Create a JSONObject array with length of coll
+    	DBCursor cur = coll.find();
+    	int index = 0;
+    	
+    	while(cur.hasNext()){
+    		JSONObject j = new JSONObject();
+    		BasicDBObject friend = cur.next();
+        	BasicDBObject cert = friend.get("certificate");		// Retrieve the certificate of the friend
+        	
+        	j.put("realname", cert.get("realname"));
+        	j.put("username", cert.get("username"));
+        	j.put("public_exponent", cert.get("public_exponent"));
+    		arr[index] = j;
+    	}
+    	
+        return arr;
     }
 
     public static JSONObject getCertificate(String username) {
+    	DBCollection coll = db.getCollection("friends");
+    	
+    	BasicDBObject query = new BasicDBObject();
+        query.put("username", username);
+        DBCursor cur = coll.find(query);						// Form a query checking the username field
+        
+        if(cur.hasNext()){
+        	JSONObject c = new JSONObject();
+        	BasicDBObject friend = cur.next();
+        	BasicDBObject cert = friend.get("certificate");		// Retrieve the certificate of the friend
+        	
+        	c.put("version", cert.get("version"));				// Copy all the data to the JSONObject
+            c.put("realname", cert.get("realname"));
+            c.put("username", cert.get("username"));
+            c.put("email", cert.get("email"));
+            c.put("not_before", cert.get("not_before"));
+            c.put("not_after", cert.get("not_after")); 
+            c.put("notes", cert.get("notes"));
+            c.put("modulus", cert.get("modulus"));			
+            c.put("public_exponent", cert.get("public_exponent"));
+            
+            return c;
+        }
+        
         return null;
     }
 
     public static boolean isFriend(String username) {
-        return true;
+    	DBCollection coll = db.getCollection("friends");
+    	
+    	BasicDBObject query = new BasicDBObject();
+        query.put("username", username);
+        DBCursor cur = coll.find(query);					// Form a query checking the username field of the friends document
+        
+        if(cur.hasNext())
+        	return true;									// If the query returns a document, return true
+        return false;
     }
 
     /*
@@ -141,6 +211,18 @@ public class DataController {
      */
 
     public static void printFriends() {
+    	DBCollection coll = db.getCollection("friends");
+    	
+    	DBCursor cur = coll.find();											// Get the list of friends
+    	
+    	while(cur.hasNext()){
+    		BasicDBObject friend = cur.next();								// Iterate through the friends
+    		BasicDBObject cert = friend.get("certificate");					// Get the certificate of the friend
+    		
+    		System.out.println("Real name: " + cert.get("realname") + 		// Print out the friend's info
+    						" Username: " + cert.get("username") + 
+    						" Public Key: " + cert.get("public_exponent"));
+    	}
 
     }
 
