@@ -152,7 +152,7 @@ public class DataController {
     	while(cur.hasNext()){
     		JSONObject j = new JSONObject();
     		DBObject friend = cur.next();
-        	DBObject cert = friend.get("certificate");		// Retrieve the certificate of the friend
+        	BasicDBObject cert = (BasicDBObject)friend.get("certificate");		// Retrieve the certificate of the friend
         	
         	j.put("realname", cert.get("realname"));
         	j.put("username", cert.get("username"));
@@ -173,7 +173,7 @@ public class DataController {
         if(cur.hasNext()){
         	JSONObject c = new JSONObject();
         	DBObject friend = cur.next();
-        	DBObject cert = friend.get("certificate");		// Retrieve the certificate of the friend
+        	BasicDBObject cert = (BasicDBObject)friend.get("certificate");		// Retrieve the certificate of the friend
         	
         	c.put("version", cert.get("version"));				// Copy all the data to the JSONObject
             c.put("realname", cert.get("realname"));
@@ -214,7 +214,7 @@ public class DataController {
     	DBCollection coll = db.getCollection("friends");
 
         // Create a JSONObject array with length of coll
-    	JSONObject[] arr = new JSONObject[coll.getCount()];
+    	JSONObject[] arr = new JSONObject[(int)coll.getCount()];
 
         // Get cursor to interate through wallposts
     	DBCursor cur = coll.find();
@@ -224,10 +224,6 @@ public class DataController {
     		JSONObject j = new JSONObject();
     		DBObject wallpost = cur.next();
         	
-            // Add info the wallpost JSON object
-        	j.put("username", cert.get("username"));
-        	j.put("message", cert.get("message"));
-
             // Add wallpost JSON object to array
     		arr[index] = j;
     	}
@@ -252,7 +248,7 @@ public class DataController {
     	
     	while(cur.hasNext()){
     		DBObject friend = cur.next();								// Iterate through the friends
-    		DBObject cert = friend.get("certificate");					// Get the certificate of the friend
+        	BasicDBObject cert = (BasicDBObject)friend.get("certificate");		// Retrieve the certificate of the friend
     		
     		System.out.println("Real name: " + cert.get("realname") + 		// Print out the friend's info
     						" Username: " + cert.get("username") + 
