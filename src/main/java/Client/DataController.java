@@ -145,14 +145,14 @@ public class DataController {
 
     public static JSONObject[] getFriends() {
     	DBCollection coll = db.getCollection("friends");
-    	JSONObject[] arr = new JSONObject[coll.getCount()];		// Create a JSONObject array with length of coll
+    	JSONObject[] arr = new JSONObject[(int)coll.getCount()];		// Create a JSONObject array with length of coll
     	DBCursor cur = coll.find();
     	int index = 0;
     	
     	while(cur.hasNext()){
     		JSONObject j = new JSONObject();
-    		BasicDBObject friend = cur.next();
-        	BasicDBObject cert = friend.get("certificate");		// Retrieve the certificate of the friend
+    		DBObject friend = cur.next();
+        	DBObject cert = friend.get("certificate");		// Retrieve the certificate of the friend
         	
         	j.put("realname", cert.get("realname"));
         	j.put("username", cert.get("username"));
@@ -172,8 +172,8 @@ public class DataController {
         
         if(cur.hasNext()){
         	JSONObject c = new JSONObject();
-        	BasicDBObject friend = cur.next();
-        	BasicDBObject cert = friend.get("certificate");		// Retrieve the certificate of the friend
+        	DBObject friend = cur.next();
+        	DBObject cert = friend.get("certificate");		// Retrieve the certificate of the friend
         	
         	c.put("version", cert.get("version"));				// Copy all the data to the JSONObject
             c.put("realname", cert.get("realname"));
@@ -222,7 +222,7 @@ public class DataController {
     	int index = 0;
     	while(cur.hasNext()){
     		JSONObject j = new JSONObject();
-    		BasicDBObject wallpost = cur.next();
+    		DBObject wallpost = cur.next();
         	
             // Add info the wallpost JSON object
         	j.put("username", cert.get("username"));
@@ -251,8 +251,8 @@ public class DataController {
     	DBCursor cur = coll.find();											// Get the list of friends
     	
     	while(cur.hasNext()){
-    		BasicDBObject friend = cur.next();								// Iterate through the friends
-    		BasicDBObject cert = friend.get("certificate");					// Get the certificate of the friend
+    		DBObject friend = cur.next();								// Iterate through the friends
+    		DBObject cert = friend.get("certificate");					// Get the certificate of the friend
     		
     		System.out.println("Real name: " + cert.get("realname") + 		// Print out the friend's info
     						" Username: " + cert.get("username") + 
