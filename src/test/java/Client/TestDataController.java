@@ -44,4 +44,8 @@ public class TestDataController extends TestCase {
         assertEquals(testPassed, true);
     }
 
+    public void testAdd0AndGetWallPosts() {
+        assertEquals(d.getWallPosts().length, 0);
+    }
+
 }
