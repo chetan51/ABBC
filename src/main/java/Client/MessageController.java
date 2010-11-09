@@ -37,6 +37,7 @@ public class MessageController {
 			return null;
 		}
 		JSONObject message = new JSONObject();
+            /*
 		try {
 			Signature s = new Signature();
 			BigInteger[] key = DataController.getPrivateKey();
@@ -69,6 +70,7 @@ public class MessageController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
         }
+            */
 		return message.toString();
 	}
 

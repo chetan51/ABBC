@@ -28,7 +28,7 @@ public class DataController {
     ------------------------------------------------------------------------ 
      */
 
-    public static void initialize(String username, String password) throws Throwable{
+    public static void initialize(String username, String password) throws Exception {
         // Initialize database connection
         m = new Mongo("localhost", 27017);
 
@@ -39,7 +39,7 @@ public class DataController {
         boolean auth = db.authenticate(username, password.toCharArray());
 
         if (!auth) {
-            throw new Throwable("Unable to authenticate database connection");
+            throw new Exception("Unable to authenticate database connection");
         }
     }
 
@@ -55,8 +55,25 @@ public class DataController {
 
     public static boolean registerClient( String username,
                             String password,
-                            JSONObject certificate,
+                            String certificate,
                             BigInteger privateKey) {
+
+        // Get the client collection
+    	DBCollection coll = db.getCollection("client");
+
+		// Reset registered client if already exists
+		coll.drop();
+
+        // Build client data
+    	BasicDBObject clientData = new BasicDBObject();
+        clientData.put("username", username);
+        clientData.put("password", password);
+        clientData.put("certificate", certificate);
+        clientData.put("privateKey", privateKey.toString());
+
+        // Insert the client data document into the collection
+        coll.insert(clientData);
+
         return true;
     }
 
@@ -126,16 +143,52 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    public static BigInteger[] getPrivateKey() {
-        return null;
+    public static BigInteger getPrivateKey() {
+		
+    	DBCollection coll = db.getCollection("client");
+    	
+    	BasicDBObject query = new BasicDBObject();
+        DBObject client = coll.findOne();
+        
+        if(client != null) {
+    		return new BigInteger(client.get("privateKey").toString());
+		}
+		else {
+			return null;
+		}			
+
     }
 
-    public static JSONObject getCertificate() {
-        return null;
+    public static String getCertificate() {
+
+    	DBCollection coll = db.getCollection("client");
+    	
+    	BasicDBObject query = new BasicDBObject();
+        DBObject client = coll.findOne();
+        
+        if(client != null) {
+    		return client.get("certificate").toString();
+		}
+		else {
+			return null;
+		}			
+
     }
 
     public static String getUsername() {
-        return null;
+        
+    	DBCollection coll = db.getCollection("client");
+    	
+    	BasicDBObject query = new BasicDBObject();
+        DBObject client = coll.findOne();
+        
+        if(client != null) {
+    		return client.get("username").toString();
+		}
+		else {
+			return null;
+		}			
+
     }
 
     /*
@@ -208,10 +261,10 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    public static JSONObject[] getWallPosts() {
+    public static JSONObject[] getWallPosts() throws JSONException {
 
         // Get wallposts collection
-    	DBCollection coll = db.getCollection("friends");
+    	DBCollection coll = db.getCollection("wallposts");
 
         // Create a JSONObject array with length of coll
     	JSONObject[] arr = new JSONObject[(int)coll.getCount()];
@@ -224,6 +277,9 @@ public class DataController {
     		JSONObject j = new JSONObject();
     		DBObject wallpost = cur.next();
         	
+        	j.put("username", wallpost.get("username"));
+        	j.put("message", wallpost.get("message"));
+
             // Add wallpost JSON object to array
     		arr[index] = j;
     	}
@@ -263,6 +319,17 @@ public class DataController {
      */
 
     public static void printWallPosts() {
+		
+    	DBCollection coll = db.getCollection("wallposts");
+    	
+    	DBCursor cur = coll.find();	// Get the list of wallposts
+    	
+    	while(cur.hasNext()){
+    		DBObject wallpost = cur.next();	// Iterate through the wallposts
+    		
+    		System.out.println(	"Sender's username: " + wallpost.get("username") + "\n" +
+    							"Message: " + wallpost.get("message"));
+    	}
 
     }
 
