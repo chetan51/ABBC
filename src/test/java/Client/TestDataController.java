@@ -203,7 +203,18 @@ public class TestDataController extends TestCase {
 	}
 	
 	public void testIsFriend(){
-		try {		
+		try {
+            String username = "friend2";
+			String password = "password";
+
+			KeyGen k = new KeyGen();
+			BigInteger[] key = k.GenerateKey(256);
+			CertificateGenerator cg = new CertificateGenerator("Test", "Client", "friend2", "test@test.com", "note");
+			String certificate = cg.generate(key[2], key[0]);
+		
+			JSONObject j = new JSONObject(certificate);
+			d.addFriend("friend2", username, j);
+			
 			assertEquals(d.isFriend("no"), false);
 			assertEquals(d.isFriend("friend2"), true);
         }
@@ -214,6 +225,28 @@ public class TestDataController extends TestCase {
 	
 	public void testPrintFriends() {
         try {
+			String username = "friend1";
+			String password = "password";
+
+			KeyGen k = new KeyGen();
+			BigInteger[] key = k.GenerateKey(256);
+			CertificateGenerator cg = new CertificateGenerator("Test", "Client", "friend1", "test@test.com", "note");
+			String certificate = cg.generate(key[2], key[0]);
+		
+			JSONObject j = new JSONObject(certificate);
+			d.addFriend("Test Client", username, j);
+			
+			String username2 = "friend2";
+			String password2 = "password";
+
+			KeyGen k2 = new KeyGen();
+			BigInteger[] key2 = k2.GenerateKey(256);
+			CertificateGenerator cg2 = new CertificateGenerator("Test2", "Client2", "friend2", "test@test.com", "note");
+			String certificate2 = cg2.generate(key[2], key[0]);
+		
+			JSONObject j2 = new JSONObject(certificate2);
+			d.addFriend("Test2 Client2", username2, j2);
+
             // Visually inspect this
             System.out.println("\n\nShould print two friends - friend1 and friend2:\n");
             d.printFriends();
