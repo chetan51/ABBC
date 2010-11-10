@@ -32,8 +32,6 @@ public class TestMessageController extends TestCase {
         BigInteger[] key = k.GenerateKey(256);
         CertificateGenerator cg = new CertificateGenerator("Test", "Client", "testclient", "test@test.com", "note");
         String certificate = cg.generate(key[2], key[0]);
-		
-		d.initialize(username, password);
 
         d.registerClient(username, password, certificate, key[1]);
     }
@@ -43,37 +41,60 @@ public class TestMessageController extends TestCase {
     }
 	
 	public void testCreateMessage() throws JSONException, NoSuchAlgorithmException{
+		String username = "friend1";
+		String password = "password";
+
+		KeyGen k = new KeyGen();
+		BigInteger[] key = k.GenerateKey(256);
+		CertificateGenerator cg = new CertificateGenerator("Test", "Client", "friend1", "test@test.com", "note");
+		String certificate = cg.generate(key[2], key[0]);
+	
+		JSONObject j = new JSONObject(certificate);
+		d.addFriend("friend1", username, j);
+		
 		String wall = m.createMessage("friend1", "wall_post", "sup");
 		System.out.println("message for wallpost to friend1");
 		System.out.println(wall);
 		
-		String username = "testclient";
-        String password = "password";
+		String username2 = "testclient";
+        String password2 = "password";
 
-        KeyGen k = new KeyGen();
-        BigInteger[] key = k.GenerateKey(256);
-        CertificateGenerator cg = new CertificateGenerator("Test", "Client", "testclient", "test@test.com", "note");
-        String certificate = cg.generate(key[2], key[0]);
+        KeyGen k2 = new KeyGen();
+        BigInteger[] key2 = k2.GenerateKey(256);
+        CertificateGenerator cg2 = new CertificateGenerator("Test", "Client", "testclient", "test@test.com", "note");
+        String certificate2 = cg2.generate(key[2], key[0]);
         
-        String friendRequest = m.createMessage("friend1", "friend_request", certificate);
+        String friendRequest = m.createMessage("friend1", "friend_request", certificate2);
         System.out.println("message for friend request to friend1");
 		System.out.println(friendRequest);
 	}
 	
 	public void testProcessMessage() throws JSONException{
-		String username = "testclient";
-        String password = "password";
+		
+		String username = "friend1";
+		String password = "password";
 
-        KeyGen k = new KeyGen();
-        BigInteger[] key = k.GenerateKey(256);
-        CertificateGenerator cg = new CertificateGenerator("Test", "Client", "testclient", "test@test.com", "note");
-        String certificate = cg.generate(key[2], key[0]);
+		KeyGen k = new KeyGen();
+		BigInteger[] key = k.GenerateKey(256);
+		CertificateGenerator cg = new CertificateGenerator("Test", "Client", "friend1", "test@test.com", "note");
+		String certificate = cg.generate(key[2], key[0]);
+	
+		JSONObject j = new JSONObject(certificate);
+		d.addFriend("friend1", username, j);
+		
+		String username2 = "testclient";
+        String password2 = "password";
+
+        KeyGen k2 = new KeyGen();
+        BigInteger[] key2 = k2.GenerateKey(256);
+        CertificateGenerator cg2 = new CertificateGenerator("Test", "Client", "testclient", "test@test.com", "note");
+        String certificate2 = cg2.generate(key[2], key[0]);
         
-        String friendRequest = m.createMessage("friend1", "friend_request", certificate);
-        JSONObject j = new JSONObject(friendRequest);
+        String friendRequest = m.createMessage("friend1", "friend_request", certificate2);
+        JSONObject j2 = new JSONObject(friendRequest);
         
         try{
-        	m.processMessage(j);
+        	m.processMessage(j2);
 			System.out.println("Should print one friend:");
 			d.printFriends();
         }
