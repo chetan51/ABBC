@@ -153,7 +153,7 @@ public class MessageController {
 	    
 		    byte[] encsig = cipher.doFinal(signature.getBytes());				//encrypt sig with AES
 	    
-		    JSONObject recipientCert = new JSONObject(DataController.getCertificate(recipient));
+		    JSONObject recipientCert = new JSONObject(DataController.getCertificate(recipient).toString());
 		    BigInteger hise = new BigInteger(recipientCert.getString("public_exponent"), 16);
 	    	BigInteger hisn = new BigInteger(recipientCert.getString("modulus"), 16);
 	    	String keystr = new String(skeySpec.getEncoded());
