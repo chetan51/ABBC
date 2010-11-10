@@ -118,6 +118,7 @@ public class MessageController {
     }
 
 	public static String createMessage(String recipient, String cmd, String cmdargs){
+
 		Crypter a = new Crypter();					//Init crypter
 		
 		if(!DataController.isFriend(recipient)){
@@ -134,18 +135,20 @@ public class MessageController {
 			return null;
 		}
 		JSONObject message = new JSONObject();
-            /*
 		try {
 			Signature s = new Signature();
-			BigInteger[] key = DataController.getPrivateKey();
-			String signature = s.generateSignature("bolotov", sigmsg.toString(), key[0], key[1]);			//build signature
+			JSONObject MyCert = new JSONObject(DataController.getCertificate());
+			BigInteger[] key = new BigInteger[2];
+			key[0] = DataController.getPrivateKey();
+			key[1] = new BigInteger((String)MyCert.get("modulus"), 16);
+			String signature = s.generateSignature(DataController.getUsername(), sigmsg.toString(), key[0], key[1]);			//build signature
 		
 			KeyGenerator kgen = KeyGenerator.getInstance("AES");				//AES init, session key generation
-			kgen.init(256);
+			kgen.init(128);
 			SecretKey skey = kgen.generateKey();
 		    byte[] raw = skey.getEncoded();
 		    SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-		    Cipher cipher = Cipher.getInstance("AES");
+		    Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		    cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
 	    
 		    byte[] encsig = cipher.doFinal(signature.getBytes());				//encrypt sig with AES
@@ -167,7 +170,6 @@ public class MessageController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
         }
-            */
 		return message.toString();
 	}
 
