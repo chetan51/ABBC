@@ -82,7 +82,7 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    public static boolean addFriend(  String realname
+    public static boolean addFriend(  String realname,
                         String username,
                         JSONObject cert) throws JSONException {
     	DBCollection coll = db.getCollection("friends");			// Get the friends collection
