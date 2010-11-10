@@ -17,7 +17,7 @@ import org.json.JSONException;
 
 public class MessageController {
 
-    public static boolean processMessage(JSONObject message) {
+    public static boolean processMessage(JSONObject message) throws NoSuchAlgorithmException {
  		/* Setup 
 		/* A message is invalid if:
 		 * 1) it is not intended for you
@@ -112,8 +112,6 @@ public class MessageController {
 				// Check 5
 				return false;
 			}
-			
-			return false;
 		} catch (JSONException e) {
 			return false;
 		}
