@@ -126,7 +126,7 @@ public class MessageController {
 			return null;
 		}
 		
-		JSONObject sigmsg = new JSONObject();		//build signature's massage
+		JSONObject sigmsg = new JSONObject();		//build signature's message
 		try {
 			sigmsg.put("command_type", cmd);
 			sigmsg.put("command_args", cmdargs);
@@ -172,5 +172,56 @@ public class MessageController {
         }
 		return message.toString();
 	}
+	
+	/*public static String createFriendReq(String cmd, String cmdargs){
+
+		Crypter a = new Crypter();					//Init crypter
+		
+		JSONObject sigmsg = new JSONObject();		//build signature's message
+		try {
+			sigmsg.put("command_type", cmd);
+			sigmsg.put("command_args", cmdargs);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+		JSONObject message = new JSONObject();
+		try {
+			Signature s = new Signature();
+			JSONObject MyCert = new JSONObject(DataController.getCertificate());
+			BigInteger[] key = new BigInteger[2];
+			key[0] = DataController.getPrivateKey();
+			key[1] = new BigInteger((String)MyCert.get("modulus"), 16);
+			String signature = s.generateSignature(DataController.getUsername(), sigmsg.toString(), key[0], key[1]);			//build signature
+		
+			KeyGenerator kgen = KeyGenerator.getInstance("AES");				//AES init, session key generation
+			kgen.init(128);
+			SecretKey skey = kgen.generateKey();
+		    byte[] raw = skey.getEncoded();
+		    SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+		    Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		    cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+	    
+		    byte[] encsig = cipher.doFinal(signature.getBytes());				//encrypt sig with AES
+	    
+		    //JSONObject recipientCert = new JSONObject(DataController.getCertificate(recipient).toString());
+		    BigInteger hise = new BigInteger("5", 16);
+	    	BigInteger hisn = new BigInteger("969a193f7f95592941653b50e55deea362254d71ceac43466219fe20abfebe6313b909eed1d3665b87e7223cc6a2596b23f5dd1e91dac4fcd7388437421eac483f6f468b11050a1b4ad70ab7ca918ada85735caf180b5d50faa1f8be14f3e720452749f067d6db30a45480f818e2b158d7e4d36baa98ab5af1f4e235a48456dde9fe5396ddc3f1aadc2de9b652e7e477f4e3ba11d75997eb06f82ddb5709f8a780a20357878321ac3ef11c2774592a5c6845df3ae4fe622427b6d6ac420e9630afa44aef9be96e7b25596b8bb707d72bc8f2a321868e7f26edeacd7228efe4ed9b3688c888638f9d3a5b36d96012296ea9bbba5eb80b436c5ce190324cb53c2d", 16);
+	    	String keystr = new String(skeySpec.getEncoded());
+	    	String enckeystr = a.RSAESPKCS1Encrypt(keystr, hise, hisn);			//encrypt session key
+	    
+	    	message = new JSONObject();								//build message
+	    	message.put("to_user", "cs161");
+	    	message.put("encrypted_aes_key", new BigInteger(1, enckeystr.getBytes()).toString(16));
+	    	message.put("encrypted_signature", new BigInteger(1, encsig).toString(16));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
+		return message.toString();
+	}*/
 
 }
