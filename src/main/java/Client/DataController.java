@@ -82,15 +82,13 @@ public class DataController {
      -----------------------------------------------------------------------
      */
 
-    public static boolean addFriend(  String firstName,
-                        String lastName,
+    public static boolean addFriend(  String realName,
                         String username,
                         JSONObject cert) throws JSONException {
     	DBCollection coll = db.getCollection("friends");			// Get the friends collection
     	BasicDBObject friend = new BasicDBObject();
 
-        friend.put("firstname", firstName);							// Input the info for the friend
-        friend.put("lastname", lastName);
+        friend.put("realname", realName);							// Input the info for the friend
         friend.put("username", username);
         BasicDBObject certificate = new BasicDBObject();			// Copy over the certificate info
         
