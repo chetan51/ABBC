@@ -32,6 +32,8 @@ public class TestMessageController extends TestCase {
         BigInteger[] key = k.GenerateKey(256);
         CertificateGenerator cg = new CertificateGenerator("Test", "Client", "testclient", "test@test.com", "note");
         String certificate = cg.generate(key[2], key[0]);
+		
+		d.initialize(username, password);
 
         d.registerClient(username, password, certificate, key[1]);
     }
