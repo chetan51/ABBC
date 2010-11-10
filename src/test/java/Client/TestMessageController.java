@@ -3,6 +3,8 @@ package test.java.Client;
 import junit.framework.TestCase;
 import java.math.BigInteger;
 
+import java.security.NoSuchAlgorithmException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
