@@ -25,6 +25,9 @@ public class Signature {
 		String hash = new String(h);
 		String cypherhash = a.RSAESPKCS1Encrypt(hash, e, n);	//Encrypt my hash
         String cypherhash_hex = new BigInteger(1, cypherhash.getBytes()).toString(16);
+        System.out.println("******");
+        System.out.println(cypherhash_hex);
+        System.out.println("******");
 		JSONObject signature = new JSONObject();					//Initialize the JSON object and shove everything there
 		signature.put("username", username);
 		signature.put("message", message);

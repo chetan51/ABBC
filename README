@@ -10,7 +10,7 @@ Project Part 1:
 
 	Note: We tried our best to make the RSAES-PKCS1-V1_5 encryption and decryption work, but we weren't able to make all the tests pass. The RSA primitives and EME-PKCS1-v1_5 encoding / decoding work, but the other parts of the scheme aren't working, and we're still trying our best to fix them.
 
-Project Part 2:
+Project Part 2A:
 
     We've fixed all our bugs from Part 1, and finished all the requirements for Part 2.
 
@@ -19,3 +19,11 @@ Project Part 2:
     You can find the functions for generating certificates in src/main/java/CryptoEngine/CertificateGenerator.java. The `main` function will generate a certificate for you, given the data fields as arguments at the command line.
 
     All test code is, similar to before, in src/test/java/CryptoEngine and JUnit-compatible.
+
+Project Part 2B:
+
+    In src/main/java/Client/DataController.java you can find all the functions for storing and retrieving to the database (we used MongoDB), and printing friends and wall posts.
+
+    In src/main/java/Client/MessageController.java you can find createMessage and processMessage.
+
+    Tests are in their usual place, but messy. We'll clean it up soon.
